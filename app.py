@@ -3,7 +3,7 @@ from colorama import Fore, Style
 from colorama import init, Fore, Back, Style
 init(autoreset=True)
 # Daftar library yang diperlukan
-required_libraries = ['pwinput', 'colorama', 'tabulate']
+required_libraries = ['colorama', 'pwinput', 'tabulate']
 
 animation = [
     f"[{Fore.LIGHTBLUE_EX}■{Style.RESET_ALL}□□□□□□□□□]",
@@ -38,18 +38,17 @@ for lib in required_libraries:
         print(f"Library {lib} telah diinstal.")
 
 if __name__ == "__main__":
-    from models import database
-    from views import Login_views
-    while True:
-        try:
-            Login_views.main()
-        except Exception as e:
-            print("Ups Error!!: \nError Message: ", e)
-        except KeyboardInterrupt:
-            os.system("cls")
-            print("\nKeyboard Interrupt")
-            for i in range(3, 0, -1):
-                time.sleep(1)
-                print("Auto Logout In", i)
-            continue
+    from views.Login_views import App
+    # while True:
+    try:
+        App().main_menu()
+    except Exception as e:
+        print("Ups Error!!: \nError Message: ", e)
+    except KeyboardInterrupt:
+        os.system("cls")
+        print("\nKeyboard Interrupt")
+        for i in range(3, 0, -1):
+            time.sleep(1)
+            print("Auto Logout In", i)
+            # continue
 
