@@ -69,6 +69,7 @@ Beberapa fitur yang terdapat pada program ini, yaitu :
 -------------------------------------------------------------------------------------------------
 
 ### Cara Penggunaan
+> 1. Login dan registrasi user
 
 
 
