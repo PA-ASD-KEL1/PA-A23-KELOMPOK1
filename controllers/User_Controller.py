@@ -1,5 +1,5 @@
 from tabulate import tabulate
-from models.model import ProfileModel, ProjectModel
+from models.model import ProjectModel
 
 class AbstractController:
     def __init__(self):

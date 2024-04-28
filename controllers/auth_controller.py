@@ -57,38 +57,47 @@ class LoginAdmin(AbstractLogin):
             raise SystemExit("Batas percobaan login tercapai. Keluar dari program.")
 
 class LoginPengguna(AbstractLogin):
-    logged_in_user_info = None  # Variabel global untuk menyimpan informasi login pengguna
-
-    def __init__(self, connection_manager):
+    def __init__(self):
         super().__init__()
-        self.connection_manager = connection_manager
+        self.logged_in_user_info = None
 
-    def login(self, email, password):
+    def login(self):
         connection = self.connection_manager.get_connection()
 
-        try:
-            cursor = connection.cursor(dictionary=True)
+        attempts = 0
 
-            query = "SELECT * FROM freelancer WHERE email = %s"
-            cursor.execute(query, (email,))
-            user = cursor.fetchone()
+        while attempts < MAX_ATTEMPTS:
+            email = input("Masukkan email pengguna: ").strip()
+            password = pwinput.pwinput(prompt="Masukkan password pengguna: ").strip()
 
-            if user:
-                if user["password"] == password:
-                    LoginPengguna.logged_in_user_info = user  # Menyimpan seluruh data pengguna yang sudah login di variabel global
-                    print("Login berhasil sebagai pengguna.")
-                    return True
+            try:
+                cursor = connection.cursor(dictionary=True)
+
+                query = "SELECT * FROM freelancer WHERE email = %s"
+                cursor.execute(query, (email,))
+                user = cursor.fetchone()
+
+                if user:
+                    if user["password"] == password:
+                        print("Login berhasil sebagai pengguna.")
+                        self.logged_in_user_info = user  # Menyimpan seluruh data pengguna yang sudah login
+                        user_view = User()
+                        user_view.user_menu()
+                        return
+                    else:
+                        print("Password salah. Silakan coba lagi.")
                 else:
-                    print("Password salah. Silakan coba lagi.")
-                    return False
-            else:
-                print("Email tidak terdaftar.")
-                return False
+                    print("Email salah atau tidak terdaftar sebagai pengguna.")
 
-        except mysql.connector.Error as error:
-            print("Error:", error)
-            return False
+            except mysql.connector.Error as error:
+                print("Error:", error)
 
+            finally:
+                attempts += 1
+
+        if attempts >= MAX_ATTEMPTS:
+            print("Batas percobaan login tercapai. Silakan coba lagi nanti.")
+            return
 
     def register_pengguna(self):
         connection = self.connection_manager.get_connection()
@@ -158,18 +167,18 @@ class LoginPengguna(AbstractLogin):
 
         except mysql.connector.Error as error:
             print("Error:", error)
-
+    
     def profil(self):
-        user_info = LoginPengguna.logged_in_user_info
-        if user_info:
+        if self.logged_in_user_info:
             print("Profil Pengguna:")
-            print(f"Nama: {user_info['Nama']}")
-            print(f"Alamat: {user_info['Alamat']}")
-            print(f"Email: {user_info['email']}")
-            print(f"Jenis Kelamin: {user_info['jenis_kelamin']}")
-            print(f"No. HP: {user_info['No_hp']}")
+            print(f"Nama: {self.logged_in_user_info['Nama']}")
+            print(f"Alamat: {self.logged_in_user_info['Alamat']}")
+            print(f"Email: {self.logged_in_user_info['email']}")
+            print(f"Jenis Kelamin: {self.logged_in_user_info['jenis_kelamin']}")
+            print(f"No. HP: {self.logged_in_user_info['No_hp']}")
         else:
             print("Anda belum login. Silakan login terlebih dahulu.")
+
 class LoginRecruiter(AbstractLogin):
     def login(self):
         connection = self.connection_manager.get_connection()
