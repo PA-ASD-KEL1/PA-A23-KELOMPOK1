@@ -69,7 +69,11 @@ Beberapa fitur yang terdapat pada program ini, yaitu :
 -------------------------------------------------------------------------------------------------
 
 ### Cara Penggunaan
-
+> 1. Login dan Registrasi User
+> 2. Menu Recruiter
+> 3. CRUD
+> 4. Search dan Sorting
+> 5. Profil user
 
 
 --------------------------------------
