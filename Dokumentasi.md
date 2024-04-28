@@ -70,6 +70,12 @@ Beberapa fitur yang terdapat pada program ini, yaitu :
 
 ### Cara Penggunaan
 
+ - Login dan registrasi freelancer: Freelancer harus melakukan login terlebih dahulu sebelum dapat melakukan pendaftaran project dan mengerjakan project. Jika freelancer belum terdaftar, maka ia dapat melakukan registrasi terlebih dahulu.
+  
+ - Login admin project dan recruiter: Recruiter dan admin project harus melakukan login agar dapat melakukan pekerjaannya. Admin project dapat mengatur data mulai dari data perusahaan hingga data recruiter kecuali kontrak. Recruiter dapat mengatur data kontrak untuk seorang freelancer yang diterima kerja di perusahaan terkait.
+
+ 
+
 
 
 --------------------------------------
