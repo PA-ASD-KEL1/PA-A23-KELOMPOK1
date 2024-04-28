@@ -30,30 +30,46 @@ pertumbuhan ekonomi berkelanjutan. Program ini membantu admin project untuk meng
 ---------------------------------------------------------------------------------
 
 ### Fitur
-Pada program ini terdapat library yang digunakan, diantaranya adalah PrettyTable, Datetime, time, PyMongo, os dan random.
->  1. PrettyTable merupakan library atau pustaka dalam python yang digunakan untuk membuat / mengeluarkan data dalam bentuk tabel.
->  2. Datetime adalah sebuah library atau modul yang dipanggil jika anda membutuhkan segala operasi yang berhubungan dengan waktu.
->  3. Modul time adalah modul yang menyediakan fungsi-fungsi untuk mengelola waktu dan tanggal. 
->  4. PyMongo berisi alat untuk bekerja dengan MongoDB, dan merupakan cara yang disarankan untuk bekerja dengan MongoDB dari Python.
-     Untuk menjalankan PyMongo sendiri, hal yang harus dilakukan adalah mengakses MongoDB ataupun menginstall MongoDB. 
-     Selanjutnya user dapat memverifikasi apakah instalasi telah selesai dengan sukses, kita akan terhubung ke server database MongoDB menggunakan alat mongo dan melihat status koneksi melalui MongoDB. 
->  5. Modul os dapat digunakan untuk berinteraksi dengan sistem operasi dan melakukan operasi pada file dan folder.
->  6. Modul random pada adalah modul yang menyediakan fungsi-fungsi untuk menghasilkan bilangan acak. 
-
+Pada program ini terdapat library yang digunakan, diantaranya adalah PrettyTable, Datetime, time, PyMongo, os dan random. 
+>  1. Modul os dapat digunakan untuk berinteraksi dengan sistem operasi dan melakukan operasi pada file dan folder.
+>  2. Modul random pada adalah modul yang menyediakan fungsi-fungsi untuk menghasilkan bilangan acak.
+>  3. Modul time adalah modul yang menyediakan fungsi-fungsi untuk mengelola waktu dan tanggal.
+>  4. Modul sys adalah modul untuk memberi akses ke berbagai variabel dan fungsi yang terkait dengan interpretasi Python itu sendiri.
+>  5. Modul colorama adalah modul untuk mempermudah penulisan teks berwarna pada konsol atau terminal Python. Fore digunakan untuk mengubah warna teks, sementara Style digunakan untuk mengatur gaya teks seperti cetak tebal, miring, atau normal.
+>  6. Modul mysql.connector adalah modul untuk menyediakan fungsi-fungsi untuk menjalankan kueri SQL, memanipulasi data, dan mengelola koneksi ke server MySQL.
+>  7. Modul pwinput adalah modul untuk menerima input password tanpa menampilkan karakter yang dimasukkan ke layar, sehingga meningkatkan keamanan saat memasukkan kata sandi.
+ 
 Beberapa fitur yang terdapat pada program ini, yaitu :
-- User 
-> 1. Pemilihan ruangan : User dapat melihat daftar kelas yang dapat dilakukan peminjaman.
-> 2. Membuat peminjaman : User dapat membuat peminjaman kelas yang akan digunakan.
-> 3. Mencari ruangan : User dapat mencari kelas untuk mengecek apakah kelas tersebut digunakan atau tidak, apabila digunakan maka akan memunculkan informasi daftar kelas yang digunakan.
-> 4. Melihat profil : User dapat melihat profil yang berisi data diri seperti NIM, Nama, Program Studi dan Jenis Kelamin.
+- User (Freelancer)
+> 1. Melihat profil : User dapat melihat profil yang berisi data diri seperti ID Freelancer, nama, no hp, jenis kelamin, email, alamt
+> 2. Melihat Bidang Project : User dapat melihat bidang project yang sesuai dengan yang diminati oleh para freelancer dan akan ditampilkan project-project yang sesuai dengan bidang tersebut.
+> 3. Melakukan searching project : User dapat melakukan pencarian dari project dengan beberapa kata kunci.
+> 4. Melakukan sorting project: User dapat melakukan pemilahan dari project berdasarkan
+> 5. Pendaftaran project: Setelah user mendapatkan project yang sesuai, use dapat melakukan pendaftaran project dan melakukan project tersebut.
 
-- Staff
+- Admin Project
 > 1. Membuat dan mengupdate peminjaman : Staff dapat menambahkan daftar kelas dan mengupdate status kelas yang digunakan.
 > 2. Konfirmasi Peminjaman : Staff dapat melakukan konfirmasi peminjaman yang telah dilakukan oleh mahasiswa. 
 > 3. Mencetak bukti peminjaman : Setelah Staff menambahkan daftar kelas yang akan digunakan maka dapat mencetak bukti peminjaman sebagai bukti tanda kelas digunakan sudah terkonfirmasi oleh staff.
 > 4. Mencari NIM : Staff juga dapat mencari NIM Mahasiswa yang mengkonfirmasi peminjaman ruang kelas.
 > 5. Menghapus daftar peminjaman : Staff dapat menghapus daftar peminjaman.
 > 6. Melihat profil : Staff dapat  melihat profil yang berisi data diri seperti  NIP, Nama, Jenis Kelamin, dan Jabatan.
+
+- Recruiter
+> 1. Create kontrak: Recruiter dapat membuat data kontrak kerja terbaru untuk freelancer.
+> 2. Read Kontrak: Recruiter dapaat melihat daftar kontrak yang sudah recruiter buat.
+> 3. Update Kontrak: Recruiter dapat memperbarui informasi kontrak yang sudah recruiter buat sebelumnya.
+> 4. Delete Kontrak: Recruiter dapat menghapus kontrak yang sudah recruiter buat.
+--------------------------------------------------------------------------------------------
+
+### Fungsionalitas
+>  1. Registrasi User dan recruiter. Mahasiswa dapat melakukan pendaftaran untuk dapat masuk ke dalam sistem peminjaman ruang kelas dengan mengisi formulir pendaftaran. Mahsiswa harus memberikan informasi pribadi seperti nim, nama, program studi, dan jenis kelamin.
+>  2. Login dan Logout (Exit). User dapat melakukan login ke dalam sistem dengan menggunakan nim/nip dan password mereka. User juga dapat keluar dari program dengan melalui pilihan Exit.
+>  3. CRUD. User dapat meminjam ruang kelas dengan mengisi formulir peminjaman. User harus memberikan informasi seperti tanggal dan waktu peminjaman, mata kuliah, dan keperluan peminjaman.
+-------------------------------------------------------------------------------------------------
+
+
+
 --------------------------------------
 
 
