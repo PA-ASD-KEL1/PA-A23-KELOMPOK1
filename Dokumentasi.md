@@ -69,6 +69,8 @@ Beberapa fitur yang terdapat pada program ini, yaitu :
 -------------------------------------------------------------------------------------------------
 
 ### Cara Penggunaan
+> 1. Login dan Registrasi User
+Login bisa dilakukan oleh user atau admin. User harus melakukan login terlebih dahulu sebelum dapat melakukan pelatihan atau untuk menyelesaikan project.  Jika user belum terdaftar, maka user dapat melakukan registrasi terlebih dahulu.
 
 
 
