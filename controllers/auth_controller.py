@@ -1,5 +1,5 @@
 import mysql.connector
-import pwinput
+import pwinput, re
 from views.Admin_view import Administrator
 from views.User_view import User
 from views.Recruiter_view import RecruiterMenu
@@ -25,7 +25,7 @@ class LoginAdmin(AbstractLogin):
 
         while attempts < MAX_ATTEMPTS:
             email = input("Masukkan email admin: ").strip()
-            password = input("Masukkan password admin: ").strip()
+            password = pwinput.pwinput(prompt="Masukkan password admin: ").strip()
 
             try:
                 cursor = connection.cursor(dictionary=True)
@@ -37,7 +37,6 @@ class LoginAdmin(AbstractLogin):
                 if admin:
                     if admin["password"] == password:
                         print("Login berhasil sebagai admin.")
-                        # Creating an instance of Administrator and calling its admin_menu method
                         admin_view = Administrator()
                         admin_view.admin_menu()
                         break
@@ -58,66 +57,119 @@ class LoginAdmin(AbstractLogin):
             raise SystemExit("Batas percobaan login tercapai. Keluar dari program.")
 
 class LoginPengguna(AbstractLogin):
-    def login(self):
+    logged_in_user_info = None  # Variabel global untuk menyimpan informasi login pengguna
+
+    def __init__(self, connection_manager):
+        super().__init__()
+        self.connection_manager = connection_manager
+
+    def login(self, email, password):
         connection = self.connection_manager.get_connection()
 
-        attempts = 0
+        try:
+            cursor = connection.cursor(dictionary=True)
 
-        while attempts < MAX_ATTEMPTS:
-            email = input("Masukkan email pengguna: ").strip()
-            password = pwinput.pwinput(prompt="Masukkan password pengguna: ").strip()
+            query = "SELECT * FROM freelancer WHERE email = %s"
+            cursor.execute(query, (email,))
+            user = cursor.fetchone()
 
-            try:
-                cursor = connection.cursor(dictionary=True)
-
-                query = "SELECT * FROM freelancer WHERE email = %s"
-                cursor.execute(query, (email,))
-                user = cursor.fetchone()
-
-                if user:
-                    if user["password"] == password:
-                        print("Login berhasil sebagai pengguna.")
-                        user_view = User()
-                        user_view.user_menu()  # atau metode lain yang diperlukan
-                        break
-                    else:
-                        print("Password salah. Silakan coba lagi.")
+            if user:
+                if user["password"] == password:
+                    LoginPengguna.logged_in_user_info = user  # Menyimpan seluruh data pengguna yang sudah login di variabel global
+                    print("Login berhasil sebagai pengguna.")
+                    return True
                 else:
-                    print("Email salah atau tidak terdaftar sebagai pengguna.")
+                    print("Password salah. Silakan coba lagi.")
+                    return False
+            else:
+                print("Email tidak terdaftar.")
+                return False
 
-            except mysql.connector.Error as error:
-                print("Error:", error)
+        except mysql.connector.Error as error:
+            print("Error:", error)
+            return False
 
-            finally:
-                attempts += 1
-
-        if attempts >= MAX_ATTEMPTS:
-            raise SystemExit("Batas percobaan login tercapai. Keluar dari program.")
 
     def register_pengguna(self):
         connection = self.connection_manager.get_connection()
 
-        nama = input("Masukkan username pengguna: ").strip()
-        email = input("Masukkan email pengguna: ").strip()
-        password = pwinput.pwinput(prompt="Masukkan password pengguna: ").strip()
+        # Input Nama dan pastikan kapitalisasi huruf
+        nama = input("Masukkan username pengguna: ").strip().title()
+
+        # Input ID Freelancer
+        while True:
+            id_freelancer = input("Masukkan ID Freelancer: ").strip()
+            # Periksa apakah ID Freelancer sudah ada di database
+            cursor = connection.cursor()
+            cursor.execute("SELECT * FROM freelancer WHERE ID_Freelancer = %s", (id_freelancer,))
+            if cursor.fetchone():
+                print("ID Freelancer sudah terdaftar. Silakan gunakan ID lain.")
+            else:
+                break
+
+        # Input Email dengan validasi menggunakan regular expression
+        while True:
+            email = input("Masukkan email pengguna: ").strip()
+            if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+                print("Format email tidak valid. Email harus memiliki format yang valid, contoh: example@gmail.com")
+            else:
+                break
+
+        # Input Password dengan validasi panjang
+        while True:
+            password = input("Masukkan password pengguna (harus 4 digit): ").strip()
+            if len(password) != 4 or not password.isdigit():
+                print("Password harus terdiri dari 4 digit angka.")
+            else:
+                break
+
+        # Input Nomor HP dengan validasi panjang
+        while True:
+            no_hp = input("Masukkan Nomor HP pengguna (harus 12 digit): ").strip()
+            if len(no_hp) != 12 or not no_hp.isdigit():
+                print("Nomor HP harus terdiri dari 12 digit angka.")
+            else:
+                break
+
+        # Input Alamat dengan validasi harus mengandung JL.
+        while True:
+            alamat = input("Masukkan alamat pengguna (harus mengandung 'JL.'): ").strip()
+            if 'JL.' not in alamat:
+                print("Alamat harus mengandung 'JL.'. Silakan masukkan alamat yang sesuai.")
+            else:
+                break
+
+        # Input Jenis Kelamin dengan validasi
+        while True:
+            jenis_kelamin = input("Masukkan jenis kelamin (laki-laki/perempuan): ").strip().lower()
+            if jenis_kelamin not in ['laki-laki', 'perempuan']:
+                print("Jenis kelamin hanya bisa diisi dengan 'laki-laki' atau 'perempuan'.")
+            else:
+                break
 
         try:
             cursor = connection.cursor()
 
-            query = "SELECT * FROM freelancer WHERE email = %s"
-            cursor.execute(query, (email,))
-            if cursor.fetchone():
-                print("Email sudah terdaftar. Silakan gunakan email lain.")
-                return
-
-            query = "INSERT INTO freelancer (nama, email, password) VALUES (%s, %s, %s)"
-            cursor.execute(query, (nama, email, password))
+            # Insert data pengguna ke database
+            query = "INSERT INTO freelancer (ID_Freelancer, Nama, email, password, No_hp, Alamat, jenis_kelamin) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+            cursor.execute(query, (id_freelancer, nama, email, password, no_hp, alamat, jenis_kelamin))
             connection.commit()
             print("Registrasi berhasil.")
 
         except mysql.connector.Error as error:
             print("Error:", error)
 
+    def profil(self):
+        user_info = LoginPengguna.logged_in_user_info
+        if user_info:
+            print("Profil Pengguna:")
+            print(f"Nama: {user_info['Nama']}")
+            print(f"Alamat: {user_info['Alamat']}")
+            print(f"Email: {user_info['email']}")
+            print(f"Jenis Kelamin: {user_info['jenis_kelamin']}")
+            print(f"No. HP: {user_info['No_hp']}")
+        else:
+            print("Anda belum login. Silakan login terlebih dahulu.")
 class LoginRecruiter(AbstractLogin):
     def login(self):
         connection = self.connection_manager.get_connection()
@@ -126,7 +178,7 @@ class LoginRecruiter(AbstractLogin):
 
         while attempts < MAX_ATTEMPTS:
             nama = input("Masukkan nama recruiter: ").strip()
-            password = input("Masukkan password recruiter: ").strip()
+            password = pwinput.pwinput(prompt="Masukkan password recruiter: ").strip()
 
             try:
                 cursor = connection.cursor(dictionary=True)

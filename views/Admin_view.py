@@ -1,6 +1,5 @@
 from colorama import Fore, Style
 import sys
-import os
 import random
 import time
 from models import model
@@ -45,7 +44,8 @@ class Menu:
 
 class Administrator(Menu):
     def __init__(self):
-        self.model_i = model.RecordModel()
+        super().__init__()
+        self.model_i = model.RecordModel()  # Anda membuat objek RecordModel di sini
 
     # Admin menu
     def admin_menu(self):
@@ -119,22 +119,26 @@ class Administrator(Menu):
                 choice = input("\033[3;32mEnter your choice: \033[0m")
                 if choice == "1":
                     data = {}
-                    for column in self.model_i.get_columns(table):
+                    for column in self.model_i.get_columns(table):  # Memanggil get_columns() dari objek RecordModel
                         value = input(f"Enter value for {column}: ")
                         data[column] = value
                     self.model_i.create_record(table, data)
+
                 elif choice == "2":
                     self.model_i.read_records(table)
+
                 elif choice == "3":
                     record_id = input("Enter record ID to update: ")
                     data = {}
-                    for column in self.model_i.get_columns(table):
+                    for column in self.model_i.get_columns(table):  
                         value = input(f"Enter new value for {column}: ")
                         data[column] = value
                     self.model_i.update_record(table, record_id, data)
+
                 elif choice == "4":
                     record_id = input("Enter record ID to delete: ")
                     self.model_i.delete_record(table, record_id)
+
                 elif choice == "5":
                     print("Loading...")
                     self.loading_animation()

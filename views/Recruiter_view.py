@@ -34,8 +34,9 @@ class RecruiterMenu:
                 print("\033[92m│ 2. Lihat Kontrak       │\033[0m")
                 print("\033[92m│ 3. Ubah Kontrak        │\033[0m")
                 print("\033[92m│ 4. Hapus Kontrak       │\033[0m")
-                print("\033[92m│ 5. Kembali             │\033[0m")
-                print("\033[92m│ 6. Keluar              │\033[0m")
+                print("\033[92m│ 5. Lihat Project       │\033[0m")
+                print("\033[92m│ 6. Kembali             │\033[0m")
+                print("\033[92m│ 7. Keluar              │\033[0m")
                 print("\033[1;36m╰───────────────────────╯\033[0m")
 
                 choice = input("\033[3;32mPilih menu: \033[0m")
@@ -69,10 +70,13 @@ class RecruiterMenu:
                     record_id = input("Masukkan ID kontrak yang akan dihapus: ")
                     self.model.delete_record("kontrak", record_id)
                 elif choice == "5":
+                    self.login_view.loading_animation()
+                    self.model.read_records("project")
+                elif choice == "6":
                     print("Loading...")
                     self.login_view.loading_animation()
                     return
-                elif choice == "6":
+                elif choice == "7":
                     self.login_view.loading_animation()
                     print(f"{random.choice(colors)}")
                     print(f"{random.choice(colors)} Terima kasih telah menggunakan aplikasi kami! {random.choice(goodbyes)}")

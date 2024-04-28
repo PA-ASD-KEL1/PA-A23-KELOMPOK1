@@ -1,6 +1,5 @@
 from colorama import Fore, Style
 import sys
-import os
 import random
 import time
 from controllers.auth_controller import LoginAdmin, LoginPengguna, LoginRecruiter

@@ -1,6 +1,5 @@
 from tabulate import tabulate
 from models.model import ProfileModel, ProjectModel
-import math
 
 class AbstractController:
     def __init__(self):
@@ -21,18 +20,7 @@ class AbstractController:
         right = [x for x in arr if x > pivot]
         return self.quick_sort(left) + middle + self.quick_sort(right)
 
-class ProfileController(AbstractController):
-    def __init__(self):
-        super().__init__()
-        self.model = ProfileModel()
 
-    def display_data(self):
-        profiles = self.model.read_records('freelancer')  # Menggunakan metode read_records dari ProfileModel
-        if profiles:
-            headers = ["Nama", "Alamat", "Email", "Jenis Kelamin", "No. HP"]
-            print(tabulate(profiles, headers=headers, tablefmt="fancy_grid"))
-        else:
-            print("Profil tidak Ditemukan.")
 
 class ProjectController(AbstractController):
     def __init__(self):
