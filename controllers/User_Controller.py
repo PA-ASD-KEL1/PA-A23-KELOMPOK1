@@ -11,16 +11,6 @@ class AbstractController:
     def search_data(self):
         raise NotImplementedError("Subclasses must implement search_data method.")
 
-    def quick_sort(self, arr):
-        if len(arr) <= 1:
-            return arr
-        pivot = arr[len(arr) // 2]
-        left = [x for x in arr if x < pivot]
-        middle = [x for x in arr if x == pivot]
-        right = [x for x in arr if x > pivot]
-        return self.quick_sort(left) + middle + self.quick_sort(right)
-
-
 
 class ProjectController(AbstractController):
     def __init__(self):
@@ -60,12 +50,12 @@ class ProjectController(AbstractController):
         headers = ["ID Project", "Judul", "Status", "Deskripsi", "Bidang", "Gaji", "ID Admin", "Rentang Waktu"]
         project_data = [[proj["ID_Project"], proj["Judul"], proj["Status"], proj["Deskripsi"], proj["Bidang"], proj["Gaji"], proj["ID_adminproject"], proj["rentang_waktu"]] for proj in projects]
         print(tabulate(project_data, headers=headers, tablefmt="fancy_grid"))
-    
+
     def search_data(self):
         print("\n\033[1;36m╭──────────────────────────╮\033[0m")
         print("\033[1;36m│\033[0;94m   Pilih Kriteria Pencarian  \033[1;36m│\033[0m")
         print("\033[1;36m├──────────────────────────┤\033[0m")
-        print("\033[92m│ 1. Berdasarkan Gaji       │\033[0m")
+        print("\033[92m│ 1. Berdasarkan Gaji          │\033[0m")
         print("\033[92m│ 2. Berdasarkan Rentang Waktu │\033[0m")
         print("\033[1;36m│ 0. Kembali                │\033[0m")
         print("\033[1;36m╰──────────────────────────╯\033[0m")
@@ -76,23 +66,52 @@ class ProjectController(AbstractController):
             if choice == 0:
                 return
             elif choice == 1:
-                min_salary = input("\033[3;32mMasukkan gaji minimum: \033[0m")
-                max_salary = input("\033[3;32mMasukkan gaji maksimum: \033[0m")
-                projects = self.model.search_by_salary(min_salary, max_salary)  # Menyesuaikan dengan metode yang tersedia di ProjectModel
-                if projects:
-                    sorted_projects = self.quick_sort(projects)
-                    self.display_projects_table(sorted_projects)
-                else:
-                    print("Tidak ada project dalam rentang gaji ini.")
+                gaji = int(input("\033[3;36mMasukkan gaji proyek yang ingin dicari: "))
+                self.model.Search_by_salary(gaji)
             elif choice == 2:
-                time_range = input("\033[3;32mMasukkan rentang waktu (contoh: '1 minggu', '2 hari'): \033[0m")
-                projects = self.model.search_by_time_range(time_range)  # Menyesuaikan dengan metode yang tersedia di ProjectModel
-                if projects:
-                    sorted_projects = self.quick_sort(projects)
-                    self.display_projects_table(sorted_projects)
-                else:
-                    print("Tidak ada project dalam rentang waktu ini.")
+                allowed_time_ranges = ["1 bulan", "2 bulan", "3 bulan"]
+                while True:
+                    time_range = input("\033[3;32mMasukkan rentang waktu (1 bulan/2 bulan/3 bulan): \033[0m").strip().lower()
+                    if time_range in allowed_time_ranges:
+                        self.model.search_by_time_range(time_range)
+                        break
+                    else:
+                        print("\033[91mRentang waktu yang dimasukkan tidak valid. Silakan masukkan 1 bulan, 2 bulan, atau 3 bulan.")
             else:
                 print("\033[91mPilihan tidak valid!\033[0m")
         except ValueError:
             print("\033[91mMasukkan angka sebagai pilihan!\033[0m")
+
+    def daftar_project(self):
+        try:
+            # Membuat instance dari ProjectModel
+            project_model = ProjectModel()
+
+            # Meminta input ID project dari pengguna
+            project_id = input("Masukkan ID Project yang Anda inginkan: ")
+
+            # Mencari proyek berdasarkan ID
+            project = project_model.find_project_by_id(project_id)
+
+            if project:
+                print(f"\nProject ditemukan: {project['Judul']}")
+                print(f"Deskripsi: {project['Deskripsi']}")
+
+                # Meminta konfirmasi dari pengguna untuk mendaftar proyek
+                confirm = input("Apakah Anda ingin mendaftar untuk proyek ini? (ya/tidak): ")
+
+                if confirm.lower() == 'ya':
+                    # Meminta nama freelancer
+                    nama_freelancer = input("Masukkan nama Anda: ")
+                    # Memperbarui status proyek menjadi "Menunggu Persetujuan"
+                    project_model.register_for_project(project_id, nama_freelancer)
+                    print("Pendaftaran berhasil!")
+                elif confirm.lower() == 'tidak':
+                    print("Pendaftaran dibatalkan.")
+                else:
+                    print("Masukkan tidak valid. Pendaftaran dibatalkan.")
+
+            else:
+                print("Project tidak ditemukan.")
+        except Exception as e:
+            print(f"Error: {e}")

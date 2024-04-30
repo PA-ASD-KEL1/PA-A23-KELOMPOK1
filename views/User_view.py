@@ -45,8 +45,9 @@ class User:
                     self.app.loading_animation()
                     ProjectController().display_data()
                 elif choice == '3':
-                    print("Anda memilih opsi Registrasi Project")
-                    # Implementasi untuk registrasi project di sini
+                    print("Anda memilih opsi Daftar Project")
+                    self.app.loading_animation()
+                    ProjectController().daftar_project()
                 elif choice == '4':
                     print("Anda memilih opsi Cari Project")
                     self.app.loading_animation()
@@ -56,7 +57,7 @@ class User:
                     print(f"{random.choice(self.colors)}")
                     print(f"{random.choice(self.colors)} Thank you for using our app! {random.choice(self.goodbyes)}")
                     print(Style.RESET_ALL)
-                    raise SystemExit
+                    break
                 else:
                     raise ValueError("Invalid choice! Please enter a valid option.")
             except ValueError as ve:

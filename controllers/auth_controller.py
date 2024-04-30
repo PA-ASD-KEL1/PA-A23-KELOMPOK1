@@ -1,3 +1,4 @@
+from flask import session
 import mysql.connector
 import pwinput, re
 from views.Admin_view import Administrator
@@ -57,9 +58,11 @@ class LoginAdmin(AbstractLogin):
             raise SystemExit("Batas percobaan login tercapai. Keluar dari program.")
 
 class LoginPengguna(AbstractLogin):
+    user_session = {}
+
     def __init__(self):
         super().__init__()
-        self.logged_in_user_info = None
+        self.log = ""
 
     def login(self):
         connection = self.connection_manager.get_connection()
@@ -80,9 +83,9 @@ class LoginPengguna(AbstractLogin):
                 if user:
                     if user["password"] == password:
                         print("Login berhasil sebagai pengguna.")
-                        self.logged_in_user_info = user  # Menyimpan seluruh data pengguna yang sudah login
-                        user_view = User()
-                        user_view.user_menu()
+                        self.user_session["email"] = user["email"]  # Simpan informasi pengguna ke dalam user_session
+                        uv = User()
+                        uv.user_menu()
                         return
                     else:
                         print("Password salah. Silakan coba lagi.")
@@ -97,7 +100,6 @@ class LoginPengguna(AbstractLogin):
 
         if attempts >= MAX_ATTEMPTS:
             print("Batas percobaan login tercapai. Silakan coba lagi nanti.")
-            return
 
     def register_pengguna(self):
         connection = self.connection_manager.get_connection()
@@ -167,15 +169,30 @@ class LoginPengguna(AbstractLogin):
 
         except mysql.connector.Error as error:
             print("Error:", error)
-    
+
     def profil(self):
-        if self.logged_in_user_info:
-            print("Profil Pengguna:")
-            print(f"Nama: {self.logged_in_user_info['Nama']}")
-            print(f"Alamat: {self.logged_in_user_info['Alamat']}")
-            print(f"Email: {self.logged_in_user_info['email']}")
-            print(f"Jenis Kelamin: {self.logged_in_user_info['jenis_kelamin']}")
-            print(f"No. HP: {self.logged_in_user_info['No_hp']}")
+        if "email" in LoginPengguna.user_session:
+            email = LoginPengguna.user_session["email"]
+            connection = self.connection_manager.get_connection()
+            try:
+                cursor = connection.cursor(dictionary=True)
+                query = "SELECT * FROM freelancer WHERE email = %s"
+                cursor.execute(query, (email,))
+                user = cursor.fetchone()
+                if user:
+                    print("Profil Pengguna:")
+                    print(f"\033[96mNama: {user['Nama']}\033[0m")
+                    print(f"\033[96mAlamat: {user['Alamat']}\033[0m")
+                    print(f"\033[96mEmail: {user['email']}\033[0m")
+                    print(f"\033[96mJenis Kelamin: {user['jenis_kelamin']}\033[0m")
+                    print(f"\033[96mNo. HP: {user['No_hp']}\033[0m")
+                else:
+                    print("Pengguna tidak ditemukan.")
+            except mysql.connector.Error as error:
+                print("Error:", error)
+            finally:
+                cursor.close()
+                connection.close()
         else:
             print("Anda belum login. Silakan login terlebih dahulu.")
 

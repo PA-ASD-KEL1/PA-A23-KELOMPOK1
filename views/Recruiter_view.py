@@ -26,6 +26,7 @@ class RecruiterMenu:
         ]
 
         while True:
+            table = ("kontrak")
             try:
                 print("\n\033[1;36m╭───────────────────────╮\033[0m")
                 print("\033[1;36m│\033[0;94m       Recruiter Menu        \033[1;36m│\033[0m")
@@ -41,47 +42,44 @@ class RecruiterMenu:
 
                 choice = input("\033[3;32mPilih menu: \033[0m")
 
+                
                 if choice == "1":
                     data = {}
-                    self.login_view.loading_animation()
-                    data["status_kontrak"] = input("Masukkan status kontrak (Aktif/Tidak Aktif): ")
-                    data["ID_Recruiter"] = input("Masukkan ID Recruiter: ")
-                    data["ID_Perusahaan"] = input("Masukkan ID Perusahaan: ")
-                    data["durasi_kontrak"] = input("Masukkan durasi kontrak: ")
-                    data["gaji"] = input("Masukkan gaji: ")
-                    data["nama_freelancer"] = input("Masukkan nama freelancer: ")
-                    self.model.create_record("kontrak", data)
+                    for column in self.model.get_columns(table):  # Memanggil get_columns() dari objek RecordModel
+                        value = input(f"Enter value for {column}: ")
+                        data[column] = value
+                    self.model.create_record(table, data)
+
                 elif choice == "2":
-                    self.login_view.loading_animation()
-                    self.model.read_records("kontrak")
+                    self.model.read_records(table)
+
                 elif choice == "3":
-                    self.login_view.loading_animation()
-                    record_id = input("Masukkan ID kontrak yang akan diubah: ")
+                    record_id = input("Enter record ID to update: ")
                     data = {}
-                    data["status_kontrak"] = input("Masukkan status kontrak baru (Aktif/Tidak Aktif): ")
-                    data["ID_Recruiter"] = input("Masukkan ID Recruiter baru: ")
-                    data["ID_Perusahaan"] = input("Masukkan ID Perusahaan baru: ")
-                    data["durasi_kontrak"] = input("Masukkan durasi kontrak baru: ")
-                    data["gaji"] = input("Masukkan gaji baru: ")
-                    data["nama_freelancer"] = input("Masukkan nama freelancer baru: ")
-                    self.model.update_record("kontrak", record_id, data)
+                    for column in self.model.get_columns(table):  
+                        value = input(f"Enter new value for {column}: ")
+                        data[column] = value
+                    self.model.update_record(table, record_id, data)
+
                 elif choice == "4":
-                    self.login_view.loading_animation()
-                    record_id = input("Masukkan ID kontrak yang akan dihapus: ")
-                    self.model.delete_record("kontrak", record_id)
+                    record_id = input("Enter record ID to delete: ")
+                    self.model.delete_record(table, record_id)
+
                 elif choice == "5":
                     self.login_view.loading_animation()
-                    self.model.read_records("project")
+                    self.view_project("project")
+
                 elif choice == "6":
                     print("Loading...")
                     self.login_view.loading_animation()
                     return
+
                 elif choice == "7":
                     self.login_view.loading_animation()
                     print(f"{random.choice(colors)}")
                     print(f"{random.choice(colors)} Terima kasih telah menggunakan aplikasi kami! {random.choice(goodbyes)}")
                     print(Style.RESET_ALL)
-                    raise SystemExit
+                    break
                 else:
                     print(Fore.RED + "Pilihan tidak valid. Silakan masukkan opsi yang benar.")
             except ValueError as ve:

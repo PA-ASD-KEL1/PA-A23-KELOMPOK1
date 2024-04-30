@@ -164,11 +164,99 @@ class LinkedList:
             current = current.next
         return False
 
+    def jump_search(self, value):
+        current = self.head
+        prev = None
+        while current and current.data['Gaji'] < value:
+            prev = current
+            current = current.next
+
+        if not current:
+            return prev
+
+        return prev
+
+    def quick_sort(self):
+        self.head = self._quick_sort_recursive(self.head)
+
+    def _quick_sort_recursive(self, node):
+        if not node or not node.next:
+            return node
+
+        pivot = node
+        smaller_head = None
+        smaller_tail = None
+        equal_head = None
+        equal_tail = None
+        larger_head = None
+        larger_tail = None
+
+        current = node
+
+        while current:
+            if current.data['Gaji'] < pivot.data['Gaji']:
+                if not smaller_head:
+                    smaller_head = current
+                    smaller_tail = current
+                else:
+                    smaller_tail.next = current
+                    smaller_tail = current
+            elif current.data['Gaji'] == pivot.data['Gaji']:
+                if not equal_head:
+                    equal_head = current
+                    equal_tail = current
+                else:
+                    equal_tail.next = current
+                    equal_tail = current
+            else:
+                if not larger_head:
+                    larger_head = current
+                    larger_tail = current
+                else:
+                    larger_tail.next = current
+                    larger_tail = current
+
+            current = current.next
+
+        if smaller_tail:
+            smaller_tail.next = None
+        if equal_tail:
+            equal_tail.next = None
+        if larger_tail:
+            larger_tail.next = None
+
+        smaller_head = self._quick_sort_recursive(smaller_head)
+        larger_head = self._quick_sort_recursive(larger_head)
+
+        if smaller_head:
+            pivot_node = smaller_head
+            while pivot_node.next:
+                pivot_node = pivot_node.next
+            pivot_node.next = equal_head
+        else:
+            smaller_head = equal_head
+
+        if equal_head:
+            equal_tail.next = larger_head
+        else:
+            smaller_tail = larger_head
+
+        return smaller_head
+
+    def JumpSearch_rw(self, rentang_waktu):
+        current = self.head
+        while current and current.data['rentang_waktu'] < rentang_waktu:
+            current = current.next
+        if current and current.data['rentang_waktu'] == rentang_waktu:
+            return current.data
+        return None
+    
     def __iter__(self):
         current = self.head
         while current:
             yield current.data
             current = current.next
+
 
 
 class ProjectModel(AbstractModel):
@@ -183,28 +271,64 @@ class ProjectModel(AbstractModel):
         except Error as e:
             print("Error while reading projects:", e)
             return []
-    
-    def search_by_salary(self, min_salary, max_salary):
+
+    def Search_by_salary(self, gaji):
         try:
             connection = self.connection_manager.get_connection()
             cursor = connection.cursor(dictionary=True)
-            query = "SELECT * FROM project WHERE Gaji BETWEEN %s AND %s"
-            cursor.execute(query, (min_salary, max_salary))
-            projects = cursor.fetchall()
-            return projects
+            query = "SELECT * FROM project WHERE Gaji >= %s AND Gaji <= %s"
+            cursor.execute(query, (gaji, gaji))
+            results = cursor.fetchall()
+
+            if results:
+                linked_list = LinkedList()
+                for result in results:
+                    linked_list.append(result)
+
+                linked_list.quick_sort()
+                table = []
+                for data in linked_list:
+                    table.append([data['Judul'], data['Deskripsi'], data['Bidang'], data['Gaji']])
+                print(tabulate(table, headers=["Judul", "Deskripsi", "Bidang", "Gaji"], tablefmt="grid"))
+            else:
+                print("\033[3;91mTidak ada proyek dengan gaji mendekati atau sama dengan", gaji)
         except Error as e:
             print("Error while searching projects by salary:", e)
-            return []
-    
+
+
     def search_by_time_range(self, time_range):
         try:
             connection = self.connection_manager.get_connection()
             cursor = connection.cursor(dictionary=True)
-            # Assuming the project table has a 'duration' field representing time range
-            query = "SELECT * FROM project WHERE rentang_waktu = %s"
-            cursor.execute(query, (time_range,))
+            query = "SELECT * FROM project"
+            cursor.execute(query)
             projects = cursor.fetchall()
-            return projects
+
+            if projects:
+                ls = LinkedList()
+                for project in projects:
+                    ls.append(project)
+                result = ls.JumpSearch_rw(time_range)  # Anda harus mendefinisikan 'jump_search'
+
+                if result:
+                    table = [[result['ID_Project'], result['Judul'], result['Status'], result['Deskripsi'], 
+                            result['Bidang'], result['Gaji'], result['ID_adminproject'], result['rentang_waktu'], 
+                            result['nama_freelancer']]]
+                    print(tabulate(table, headers=["ID_Project", "Judul", "Status", "Deskripsi", "Bidang", "Gaji", 
+                                                "ID_adminproject", "Rentang Waktu", "Nama Freelancer"], tablefmt="grid"))
+                else:
+                    print("\033[91mData proyek dengan rentang waktu", time_range, "tidak ditemukan.")
+
         except Error as e:
             print("Error while searching projects by time range:", e)
-            return []
+
+    def register_for_project(self, project_id, nama_freelancer):
+        try:
+            connection = self.connection_manager.get_connection()
+            cursor = connection.cursor(dictionary=True)
+            query = "UPDATE project SET Status = 'Menunggu Persetujuan', nama_freelancer = %s WHERE ID_Project = %s"
+            cursor.execute(query, (nama_freelancer, project_id))
+            connection.commit()
+            print("Pendaftaran untuk proyek berhasil!")
+        except Error as e:
+            print("Error while registering for project:", e)
