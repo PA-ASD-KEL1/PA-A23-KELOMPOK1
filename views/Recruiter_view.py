@@ -67,7 +67,7 @@ class RecruiterMenu:
 
                 elif choice == "5":
                     self.login_view.loading_animation()
-                    self.view_project("project")
+                    self.model.read_records("project")
 
                 elif choice == "6":
                     print("Loading...")

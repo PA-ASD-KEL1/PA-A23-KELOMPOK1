@@ -190,9 +190,6 @@ class LoginPengguna(AbstractLogin):
                     print("Pengguna tidak ditemukan.")
             except mysql.connector.Error as error:
                 print("Error:", error)
-            finally:
-                cursor.close()
-                connection.close()
         else:
             print("Anda belum login. Silakan login terlebih dahulu.")
 

@@ -250,7 +250,7 @@ class LinkedList:
         if current and current.data['rentang_waktu'] == rentang_waktu:
             return current.data
         return None
-    
+
     def __iter__(self):
         current = self.head
         while current:
@@ -296,19 +296,32 @@ class ProjectModel(AbstractModel):
             print("Error while searching projects by salary:", e)
 
 
+    def find_project_by_id(self, project_id):
+        try:
+            connection = self.connection_manager.get_connection()
+            cursor = connection.cursor(dictionary=True)
+            query = "SELECT * FROM Project WHERE ID_Project = %s"
+            cursor.execute(query, (project_id,))
+            project = cursor.fetchone()
+            return project
+        except Error as e:
+            print(f"Error ketika mencari proyek berdasarkan ID: {e}")
+            # Mengembalikan None jika terjadi kesalahan
+
+
     def search_by_time_range(self, time_range):
         try:
             connection = self.connection_manager.get_connection()
             cursor = connection.cursor(dictionary=True)
-            query = "SELECT * FROM project"
-            cursor.execute(query)
+            query = "SELECT * FROM project WHERE rentang_waktu = %s"
+            cursor.execute(query, (time_range,))  # Anda harus melewatkan nilai parameter ke execute
             projects = cursor.fetchall()
 
             if projects:
                 ls = LinkedList()
                 for project in projects:
                     ls.append(project)
-                result = ls.JumpSearch_rw(time_range)  # Anda harus mendefinisikan 'jump_search'
+                result = ls.JumpSearch_rw(time_range)  # Anda harus mendefinisikan 'JumpSearch_rw'
 
                 if result:
                     table = [[result['ID_Project'], result['Judul'], result['Status'], result['Deskripsi'], 
@@ -319,7 +332,7 @@ class ProjectModel(AbstractModel):
                 else:
                     print("\033[91mData proyek dengan rentang waktu", time_range, "tidak ditemukan.")
 
-        except Error as e:
+        except Error as e:  # Pastikan Error diimpor dari modul yang benar (seperti mysql.connector.errors)
             print("Error while searching projects by time range:", e)
 
     def register_for_project(self, project_id, nama_freelancer):
