@@ -128,7 +128,37 @@ class RecordModel(AbstractModel):
         except Error as e:
             raise RuntimeError("Error while deleting record:", e)
 
-
+    def get_recruiter_and_company_info(self):
+        try:
+            connection = self.connection_manager.get_connection()
+            cursor = connection.cursor(dictionary=True)
+            
+            query = """
+            SELECT recruiter.ID_Recruiter, recruiter.Nama_recruiter, 
+                perusahaan.ID_Perusahaan, perusahaan.Nama_perusahaan
+            FROM recruiter
+            LEFT OUTER JOIN perusahaan ON recruiter.ID_Recruiter = perusahaan.ID_Perusahaan
+            
+            UNION
+            
+            SELECT recruiter.ID_Recruiter, recruiter.Nama_recruiter, 
+                perusahaan.ID_Perusahaan, perusahaan.Nama_perusahaan
+            FROM recruiter
+            RIGHT OUTER JOIN perusahaan ON recruiter.ID_Recruiter = perusahaan.ID_Perusahaan
+            """
+            cursor.execute(query)
+            rows = cursor.fetchall()
+            
+            results = []
+            for row in rows:
+                result_row = [row['ID_Recruiter'], row['Nama_recruiter'], row['ID_Perusahaan'], row['Nama_perusahaan']]
+                results.append(result_row)
+            
+            headers = ["ID Recruiter", "Nama Recruiter", "ID Perusahaan", "Nama Perusahaan"]
+            print(tabulate(results, headers=headers, tablefmt="grid"))
+            
+        except Exception as e:
+            print("Error occurred:", str(e))
 class LinkedList:
     class Node:
         def __init__(self, data):
@@ -314,14 +344,14 @@ class ProjectModel(AbstractModel):
             connection = self.connection_manager.get_connection()
             cursor = connection.cursor(dictionary=True)
             query = "SELECT * FROM project WHERE rentang_waktu = %s"
-            cursor.execute(query, (time_range,))  # Anda harus melewatkan nilai parameter ke execute
+            cursor.execute(query, (time_range,)) 
             projects = cursor.fetchall()
 
             if projects:
                 ls = LinkedList()
                 for project in projects:
                     ls.append(project)
-                result = ls.JumpSearch_rw(time_range)  # Anda harus mendefinisikan 'JumpSearch_rw'
+                result = ls.JumpSearch_rw(time_range) 
 
                 if result:
                     table = [[result['ID_Project'], result['Judul'], result['Status'], result['Deskripsi'], 
@@ -332,7 +362,7 @@ class ProjectModel(AbstractModel):
                 else:
                     print("\033[91mData proyek dengan rentang waktu", time_range, "tidak ditemukan.")
 
-        except Error as e:  # Pastikan Error diimpor dari modul yang benar (seperti mysql.connector.errors)
+        except Error as e:
             print("Error while searching projects by time range:", e)
 
     def register_for_project(self, project_id, nama_freelancer):
