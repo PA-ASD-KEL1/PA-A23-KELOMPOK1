@@ -10,7 +10,20 @@ pertumbuhan ekonomi berkelanjutan. Program ini membantu admin project untuk meng
 -----------------------------------------------------------------------------------------------
 
 ## Struktur Project
+### Flowchart
+- Login dan registrasi
+  ![fc ecofusion-Page-1 drawio (2)](https://github.com/PA-ASD-KEL1/ecofusion/assets/144756486/322a354c-5936-4eef-b623-ff34c1338ff9)
 
+- Menu admin
+  ![fc ecofusion-Page-4 drawio](https://github.com/PA-ASD-KEL1/ecofusion/assets/144756486/7fd7599b-549d-4b5d-9dae-b0c69a61d206)
+
+- Menu User
+  ![fc ecofusion-Halaman-2 drawio (2)](https://github.com/PA-ASD-KEL1/ecofusion/assets/144756486/5e2994c4-930b-4919-aad2-9e5b6d61ad9b)
+
+- Menu Recruiter
+ ![fc ecofusion-Page-3 drawio](https://github.com/PA-ASD-KEL1/ecofusion/assets/144756486/8f6fd866-f1bd-44e1-a38b-916f1272f2a4)
+
+### MVC
 > 1. Folder Controller, berisi file-file controller yang akan mengatur alur program serta mengambil data dari model dan menampilkan ke view.                           
 > - File Controller Account, sebagai file controller yang berisi logika untuk manajemen akun admin, user (freelancer), dan recruiter untuk mengatur registrasi, login, dan menampilkan profil.
 > - File Controller Linked List, sebagai file controller yang berisi logika untuk manajemen data ruang kelas dalam bentuk linked list, dimana data dalam linked list diambil dari database.
