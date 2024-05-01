@@ -12,16 +12,18 @@ pertumbuhan ekonomi berkelanjutan. Program ini membantu admin project untuk meng
 ## Struktur Project
 ### Flowchart
 - Login dan registrasi
-  ![fc ecofusion-Page-1 drawio (2)](https://github.com/PA-ASD-KEL1/ecofusion/assets/144756486/322a354c-5936-4eef-b623-ff34c1338ff9)
+  ![fc ecofusion-Page-1 drawio (2)](https://github.com/PA-ASD-KEL1/ecofusion/assets/144756486/37772191-f06c-4fe2-b755-65caa7073e89)
 
 - Menu admin
-  ![fc ecofusion-Page-4 drawio](https://github.com/PA-ASD-KEL1/ecofusion/assets/144756486/7fd7599b-549d-4b5d-9dae-b0c69a61d206)
+  ![fc ecofusion-Page-4 drawio (1)](https://github.com/PA-ASD-KEL1/ecofusion/assets/144756486/7767a163-037f-4ee7-8c0a-c658f3c7ca27)
+  
+  ![fc ecofusion-Page-5 drawio](https://github.com/PA-ASD-KEL1/ecofusion/assets/144756486/d7c35be3-a90a-427c-a01e-1e4e5570d962)
 
 - Menu User
-  ![fc ecofusion-Halaman-2 drawio (2)](https://github.com/PA-ASD-KEL1/ecofusion/assets/144756486/5e2994c4-930b-4919-aad2-9e5b6d61ad9b)
+  ![fc ecofusion-Halaman-2 drawio (2)](https://github.com/PA-ASD-KEL1/ecofusion/assets/144756486/ef097f63-e0a9-4e36-9e3b-e3b5409ad8e6)
 
 - Menu Recruiter
- ![fc ecofusion-Page-3 drawio](https://github.com/PA-ASD-KEL1/ecofusion/assets/144756486/8f6fd866-f1bd-44e1-a38b-916f1272f2a4)
+  ![fc ecofusion-Page-3 drawio](https://github.com/PA-ASD-KEL1/ecofusion/assets/144756486/5f5dca77-4ae5-4b3b-9ceb-0efd3dcc51a0)
 
 ### MVC
 > 1. Folder Controller, berisi file-file controller yang akan mengatur alur program serta mengambil data dari model dan menampilkan ke view.                           
@@ -86,8 +88,11 @@ Beberapa fitur yang terdapat pada program ini, yaitu :
 ## Cara Penggunaan
 
  - Login dan registrasi freelancer: Freelancer harus melakukan login terlebih dahulu sebelum dapat melakukan pendaftaran project dan mengerjakan project. Jika freelancer belum terdaftar, maka ia dapat melakukan registrasi terlebih dahulu.
+> Registrasi User
 > ![image](https://github.com/PA-ASD-KEL1/ecofusion/assets/144756486/93fcc725-1561-4ec2-9caa-1e23e1d66e34)
-![image](https://github.com/PA-ASD-KEL1/ecofusion/assets/144756486/f82eb46e-5e28-4e45-8dec-f452630ce8e2)
+
+> Login User
+>![image](https://github.com/PA-ASD-KEL1/ecofusion/assets/144756486/f82eb46e-5e28-4e45-8dec-f452630ce8e2)
 
  - Login admin project dan recruiter: Recruiter dan admin project harus melakukan login agar dapat melakukan pekerjaannya. Admin project dapat mengatur data mulai dari data perusahaan hingga data recruiter kecuali kontrak. Recruiter dapat mengatur data kontrak untuk seorang freelancer yang diterima kerja di perusahaan terkait.
 > ![image](https://github.com/PA-ASD-KEL1/ecofusion/assets/144756486/1f644a42-e4a5-4f01-8089-fd82cc9caeef)
