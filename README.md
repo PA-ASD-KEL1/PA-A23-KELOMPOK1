@@ -20,10 +20,12 @@ pertumbuhan ekonomi berkelanjutan. Program ini membantu admin project untuk meng
   ![fc ecofusion-Page-5 drawio](https://github.com/PA-ASD-KEL1/ecofusion/assets/144756486/d7c35be3-a90a-427c-a01e-1e4e5570d962)
 
 - Menu User
-  ![fc ecofusion-Halaman-2 drawio (2)](https://github.com/PA-ASD-KEL1/ecofusion/assets/144756486/ef097f63-e0a9-4e36-9e3b-e3b5409ad8e6)
+  ![fc ecofusion-Halaman-2 drawio (4)](https://github.com/PA-ASD-KEL1/PA-A23-KELOMPOK1/assets/144756486/9c6cffb4-2d2d-4a4d-8aa8-d65ec466e0b1)
+
 
 - Menu Recruiter
-  ![fc ecofusion-Page-3 drawio](https://github.com/PA-ASD-KEL1/ecofusion/assets/144756486/5f5dca77-4ae5-4b3b-9ceb-0efd3dcc51a0)
+  ![fc ecofusion-Page-3 drawio (2)](https://github.com/PA-ASD-KEL1/PA-A23-KELOMPOK1/assets/144756486/9e171e7b-3742-4e73-9607-1e01499f1cf6)
+
 
 ### MVC
 > 1. Folder Controller, berisi file-file controller yang akan mengatur alur program serta mengambil data dari model dan menampilkan ke view.                           
